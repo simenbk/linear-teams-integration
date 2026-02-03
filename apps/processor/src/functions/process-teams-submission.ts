@@ -36,7 +36,7 @@ async function processTeamsSubmission(
     // 4. Create sync mapping
     // 5. Post confirmation to Teams (proactive message)
 
-    const { title, description, priority, channelConfigId } = payload;
+    const { title, priority } = payload;
 
     context.log(`Creating Linear issue: ${title} (priority ${priority})`);
 

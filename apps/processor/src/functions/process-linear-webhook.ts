@@ -3,7 +3,7 @@
  */
 
 import { app, InvocationContext } from '@azure/functions';
-import { parseQueueMessage, createDeadLetterInfo } from '@linear-teams/queue';
+import { parseQueueMessage } from '@linear-teams/queue';
 import type { LinearWebhookQueueMessage } from '@linear-teams/shared';
 
 /**

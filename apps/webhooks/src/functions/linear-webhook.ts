@@ -13,7 +13,6 @@ import {
   LINEAR_SIGNATURE_HEADER,
   QUEUE_NAMES,
   HTTP_STATUS,
-  generateId,
   type LinearWebhookQueueMessage,
 } from '@linear-teams/shared';
 import { QueueClient } from '@linear-teams/queue';
