@@ -43,6 +43,7 @@ var planId = empty(appServicePlanId) ? hostingPlan.id : appServicePlanId
 var baseAppSettings = {
   FUNCTIONS_EXTENSION_VERSION: '~4'
   FUNCTIONS_WORKER_RUNTIME: 'node'
+  AzureWebJobsFeatureFlags: 'EnableWorkerIndexing'
   WEBSITE_NODE_DEFAULT_VERSION: '~20'
   AzureWebJobsStorage: storageAccountConnectionString
   WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
