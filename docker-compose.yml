@@ -1,0 +1,142 @@
+version: "3.8"
+
+services:
+  # ==========================================================================
+  # Azure Functions Apps
+  # ==========================================================================
+
+  bot:
+    build:
+      context: .
+      target: bot
+    ports:
+      - "7071:80"
+    environment:
+      - AzureWebJobsStorage=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;TableEndpoint=http://azurite:10002/devstoreaccount1;
+      - FUNCTIONS_WORKER_RUNTIME=node
+      - MICROSOFT_APP_ID=${MICROSOFT_APP_ID:-}
+      - MICROSOFT_APP_PASSWORD=${MICROSOFT_APP_PASSWORD:-}
+      - MICROSOFT_APP_TENANT_ID=${MICROSOFT_APP_TENANT_ID:-}
+      - SERVICE_BUS_CONNECTION_STRING=${SERVICE_BUS_CONNECTION_STRING:-}
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/linear_teams
+    depends_on:
+      - azurite
+      - postgres
+    networks:
+      - linear-teams-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  webhooks:
+    build:
+      context: .
+      target: webhooks
+    ports:
+      - "7072:80"
+    environment:
+      - AzureWebJobsStorage=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;TableEndpoint=http://azurite:10002/devstoreaccount1;
+      - FUNCTIONS_WORKER_RUNTIME=node
+      - LINEAR_WEBHOOK_SECRET=${LINEAR_WEBHOOK_SECRET:-development-secret}
+      - SERVICE_BUS_CONNECTION_STRING=${SERVICE_BUS_CONNECTION_STRING:-}
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/linear_teams
+    depends_on:
+      - azurite
+      - postgres
+    networks:
+      - linear-teams-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  processor:
+    build:
+      context: .
+      target: processor
+    ports:
+      - "7073:80"
+    environment:
+      - AzureWebJobsStorage=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;TableEndpoint=http://azurite:10002/devstoreaccount1;
+      - FUNCTIONS_WORKER_RUNTIME=node
+      - SERVICE_BUS_CONNECTION_STRING=${SERVICE_BUS_CONNECTION_STRING:-}
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/linear_teams
+      - LINEAR_API_KEY=${LINEAR_API_KEY:-}
+      - MICROSOFT_APP_ID=${MICROSOFT_APP_ID:-}
+      - MICROSOFT_APP_PASSWORD=${MICROSOFT_APP_PASSWORD:-}
+    depends_on:
+      - azurite
+      - postgres
+    networks:
+      - linear-teams-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ==========================================================================
+  # Infrastructure Services
+  # ==========================================================================
+
+  # Azure Storage Emulator
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    ports:
+      - "10000:10000"  # Blob
+      - "10001:10001"  # Queue
+      - "10002:10002"  # Table
+    volumes:
+      - azurite-data:/data
+    command: azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --location /data --debug /data/debug.log
+    networks:
+      - linear-teams-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=linear_teams
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - linear-teams-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ngrok for exposing webhooks locally (optional)
+  ngrok:
+    image: ngrok/ngrok:latest
+    profiles:
+      - tunnel
+    ports:
+      - "4040:4040"  # ngrok web interface
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN:-}
+    command: http webhooks:80 --log stdout
+    depends_on:
+      - webhooks
+    networks:
+      - linear-teams-network
+
+networks:
+  linear-teams-network:
+    driver: bridge
+
+volumes:
+  azurite-data:
+  postgres-data:
