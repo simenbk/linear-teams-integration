@@ -8,7 +8,7 @@ import type {
   LinearPriority,
   Result,
 } from '@linear-teams/shared';
-import { ok, err } from '@linear-teams/shared';
+import { err } from '@linear-teams/shared';
 
 export interface CreateIssueParams {
   teamId: string;

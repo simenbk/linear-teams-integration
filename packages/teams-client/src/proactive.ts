@@ -59,7 +59,7 @@ export function serializeConversationReference(
 export function deserializeConversationReference(
   data: ConversationReferenceData
 ): Partial<ConversationReference> {
-  return {
+  const ref: Partial<ConversationReference> = {
     bot: { id: data.botId, name: '' },
     conversation: {
       id: data.conversationId,
@@ -70,6 +70,9 @@ export function deserializeConversationReference(
     },
     serviceUrl: data.serviceUrl,
     channelId: data.channelId ?? 'msteams',
-    activityId: data.activityId,
   };
+  if (data.activityId !== undefined) {
+    ref.activityId = data.activityId;
+  }
+  return ref;
 }

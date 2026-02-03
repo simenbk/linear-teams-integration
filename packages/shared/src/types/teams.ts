@@ -31,7 +31,7 @@ export interface TeamsUser {
   /** Display name */
   name: string;
   /** Email address */
-  email?: string;
+  email?: string | undefined;
 }
 
 export interface TeamsAttachment {
@@ -58,7 +58,7 @@ export interface ConversationReferenceData {
   /** Tenant ID */
   tenantId: string;
   /** Channel ID (for channel messages) */
-  channelId?: string;
+  channelId?: string | undefined;
   /** Activity ID of the original message */
-  activityId?: string;
+  activityId?: string | undefined;
 }

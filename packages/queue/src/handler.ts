@@ -46,7 +46,7 @@ export interface DeadLetterInfo {
   reason: string;
   description: string;
   attemptCount: number;
-  lastError?: string;
+  lastError?: string | undefined;
 }
 
 export function createDeadLetterInfo(
