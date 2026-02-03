@@ -132,10 +132,11 @@ describe('LinearTeamsBot', () => {
       );
     });
 
-    it('should handle undefined text', async () => {
-      const context = createMockTurnContext(
-        createMockActivity({ text: undefined })
-      );
+    it('should handle missing text', async () => {
+      // Create activity without text property
+      const activity = createMockActivity({});
+      delete (activity as { text?: string }).text;
+      const context = createMockTurnContext(activity);
 
       await bot.run(context);
 

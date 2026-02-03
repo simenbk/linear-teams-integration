@@ -59,12 +59,6 @@ export function createMockTurnContext(
     onDeleteActivity: vi.fn(),
   } as unknown as TurnContext;
 
-  // Add static method for conversation reference
-  vi.spyOn(
-    { getConversationReference: TurnContext.getConversationReference },
-    'getConversationReference'
-  );
-
   return context;
 }
 
