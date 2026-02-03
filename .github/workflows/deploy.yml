@@ -140,9 +140,15 @@ jobs:
 
       - name: Prepare deployment package
         run: |
-          cd apps/${{ matrix.app }}
           npm ci --omit=dev
-          zip -r ../../${{ matrix.app }}.zip .
+          APP_DIR="apps/${{ matrix.app }}"
+          STAGING="deploy/${{ matrix.app }}"
+          rm -rf "$STAGING"
+          mkdir -p "$STAGING"
+          cp -R "$APP_DIR/dist" "$STAGING/dist"
+          cp "$APP_DIR/host.json" "$APP_DIR/package.json" "$STAGING/"
+          cp -LR node_modules "$STAGING/node_modules"
+          (cd "$STAGING" && zip -r "../../${{ matrix.app }}.zip" .)
 
       - name: Azure Login
         uses: azure/login@v2
