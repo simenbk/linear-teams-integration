@@ -1,0 +1,29 @@
+{
+  "name": "@linear-teams/bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/functions/*.js",
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "start": "func start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.4.0",
+    "botbuilder": "^4.22.0",
+    "botframework-connector": "^4.22.0",
+    "@linear-teams/shared": "*",
+    "@linear-teams/teams-client": "*",
+    "@linear-teams/db": "*",
+    "@linear-teams/queue": "*"
+  },
+  "devDependencies": {
+    "azure-functions-core-tools": "^4.0.0",
+    "typescript": "^5.4.0"
+  }
+}
