@@ -11,7 +11,10 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@azure/functions": "^4.4.0",
