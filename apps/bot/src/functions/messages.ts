@@ -16,15 +16,12 @@ import {
 import { LinearTeamsBot } from '../bot.js';
 
 // Bot Framework authentication configuration
-const botFrameworkAuth = new ConfigurationBotFrameworkAuthentication(
-  {} as ConfigurationBotFrameworkAuthenticationOptions,
-  {
-    MicrosoftAppId: process.env['MICROSOFT_APP_ID'] ?? '',
-    MicrosoftAppPassword: process.env['MICROSOFT_APP_PASSWORD'] ?? '',
-    MicrosoftAppTenantId: process.env['MICROSOFT_APP_TENANT_ID'] ?? '',
-    MicrosoftAppType: 'MultiTenant',
-  }
-);
+const botFrameworkAuth = new ConfigurationBotFrameworkAuthentication({
+  MicrosoftAppId: process.env['MICROSOFT_APP_ID'] ?? '',
+  MicrosoftAppPassword: process.env['MICROSOFT_APP_PASSWORD'] ?? '',
+  MicrosoftAppTenantId: process.env['MICROSOFT_APP_TENANT_ID'] ?? '',
+  MicrosoftAppType: 'MultiTenant',
+} as ConfigurationBotFrameworkAuthenticationOptions);
 
 const adapter = new CloudAdapter(botFrameworkAuth);
 
@@ -47,10 +44,9 @@ async function messagesHandler(
 
   try {
     const body = await request.text();
-    const authHeader = request.headers.get('authorization') ?? '';
 
     // Process the incoming activity
-    const response = await adapter.process(
+    await adapter.process(
       {
         body: JSON.parse(body),
         headers: Object.fromEntries(request.headers.entries()),
@@ -81,6 +77,6 @@ async function messagesHandler(
 app.http('messages', {
   methods: ['POST'],
   authLevel: 'anonymous',
-  route: 'api/messages',
+  route: 'messages',
   handler: messagesHandler,
 });

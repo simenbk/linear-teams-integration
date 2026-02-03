@@ -3,7 +3,6 @@
  */
 
 import {
-  ActivityHandler,
   TurnContext,
   TeamsActivityHandler,
   CardFactory,
@@ -71,20 +70,14 @@ export class LinearTeamsBot extends TeamsActivityHandler {
   private async showHelp(context: TurnContext): Promise<void> {
     await context.sendActivity({
       attachments: [
-        CardFactory.heroCard(
+CardFactory.heroCard(
           'Linear Integration Help',
-          undefined,
-          undefined,
-          undefined,
-          {
-            text:
-              '**Commands:**\n\n' +
-              '• **submit** - Open the bug/feature submission form\n' +
-              '• **bug** - Submit a bug report\n' +
-              '• **feature** - Submit a feature request\n' +
-              '• **help** - Show this help message\n\n' +
-              'Issues submitted here will be synced to Linear.',
-          }
+          '**Commands:**\n\n' +
+            '• **submit** - Open the bug/feature submission form\n' +
+            '• **bug** - Submit a bug report\n' +
+            '• **feature** - Submit a feature request\n' +
+            '• **help** - Show this help message\n\n' +
+            'Issues submitted here will be synced to Linear.'
         ),
       ],
     });
