@@ -41,3 +41,7 @@ coverage/
 # Misc
 *.bak
 *.tmp
+
+# Bicep compiled output
+infra/*.json
+!infra/*parameters*.json
