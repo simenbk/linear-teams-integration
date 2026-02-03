@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # ==========================================================================
   # Azure Functions Apps
@@ -9,6 +7,7 @@ services:
     build:
       context: .
       target: bot
+    platform: linux/amd64
     ports:
       - "7071:80"
     environment:
@@ -35,6 +34,7 @@ services:
     build:
       context: .
       target: webhooks
+    platform: linux/amd64
     ports:
       - "7072:80"
     environment:
@@ -59,6 +59,7 @@ services:
     build:
       context: .
       target: processor
+    platform: linux/amd64
     ports:
       - "7073:80"
     environment:
