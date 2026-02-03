@@ -20,7 +20,7 @@ import { QueueClient } from '@linear-teams/queue';
 /**
  * HTTP trigger for Linear webhook events
  */
-async function linearWebhookHandler(
+export async function linearWebhookHandler(
   request: HttpRequest,
   context: InvocationContext
 ): Promise<HttpResponseInit> {
