@@ -10,8 +10,8 @@ import {
 } from '@azure/functions';
 
 async function healthHandler(
-  request: HttpRequest,
-  context: InvocationContext
+  _request: HttpRequest,
+  _context: InvocationContext
 ): Promise<HttpResponseInit> {
   return {
     status: 200,
@@ -26,6 +26,6 @@ async function healthHandler(
 app.http('health', {
   methods: ['GET'],
   authLevel: 'anonymous',
-  route: 'api/health',
+  route: 'health',
   handler: healthHandler,
 });
