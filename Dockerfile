@@ -60,7 +60,10 @@ COPY --from=builder /app/apps/bot/package.json ./
 # Copy built app
 COPY --from=builder /app/apps/bot/dist ./dist
 
-# Copy workspace packages as local node_modules
+# Copy all node_modules (includes all transitive dependencies)
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy workspace packages built artifacts into node_modules
 COPY --from=builder /app/packages/shared/dist ./node_modules/@linear-teams/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./node_modules/@linear-teams/shared/
 COPY --from=builder /app/packages/teams-client/dist ./node_modules/@linear-teams/teams-client/dist
@@ -69,14 +72,6 @@ COPY --from=builder /app/packages/db/dist ./node_modules/@linear-teams/db/dist
 COPY --from=builder /app/packages/db/package.json ./node_modules/@linear-teams/db/
 COPY --from=builder /app/packages/queue/dist ./node_modules/@linear-teams/queue/dist
 COPY --from=builder /app/packages/queue/package.json ./node_modules/@linear-teams/queue/
-
-# Copy external dependencies
-COPY --from=builder /app/node_modules/botbuilder ./node_modules/botbuilder
-COPY --from=builder /app/node_modules/botbuilder-core ./node_modules/botbuilder-core
-COPY --from=builder /app/node_modules/botframework-connector ./node_modules/botframework-connector
-COPY --from=builder /app/node_modules/botframework-schema ./node_modules/botframework-schema
-COPY --from=builder /app/node_modules/@azure ./node_modules/@azure
-COPY --from=builder /app/node_modules/uuid ./node_modules/uuid
 
 EXPOSE 80
 
@@ -98,7 +93,10 @@ COPY --from=builder /app/apps/webhooks/package.json ./
 # Copy built app
 COPY --from=builder /app/apps/webhooks/dist ./dist
 
-# Copy workspace packages
+# Copy all node_modules (includes all transitive dependencies)
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy workspace packages built artifacts into node_modules
 COPY --from=builder /app/packages/shared/dist ./node_modules/@linear-teams/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./node_modules/@linear-teams/shared/
 COPY --from=builder /app/packages/linear-client/dist ./node_modules/@linear-teams/linear-client/dist
@@ -107,11 +105,6 @@ COPY --from=builder /app/packages/db/dist ./node_modules/@linear-teams/db/dist
 COPY --from=builder /app/packages/db/package.json ./node_modules/@linear-teams/db/
 COPY --from=builder /app/packages/queue/dist ./node_modules/@linear-teams/queue/dist
 COPY --from=builder /app/packages/queue/package.json ./node_modules/@linear-teams/queue/
-
-# Copy external dependencies
-COPY --from=builder /app/node_modules/@linear ./node_modules/@linear
-COPY --from=builder /app/node_modules/@azure ./node_modules/@azure
-COPY --from=builder /app/node_modules/uuid ./node_modules/uuid
 
 EXPOSE 80
 
@@ -133,7 +126,10 @@ COPY --from=builder /app/apps/processor/package.json ./
 # Copy built app
 COPY --from=builder /app/apps/processor/dist ./dist
 
-# Copy workspace packages
+# Copy all node_modules (includes all transitive dependencies)
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy workspace packages built artifacts into node_modules
 COPY --from=builder /app/packages/shared/dist ./node_modules/@linear-teams/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./node_modules/@linear-teams/shared/
 COPY --from=builder /app/packages/linear-client/dist ./node_modules/@linear-teams/linear-client/dist
@@ -144,14 +140,5 @@ COPY --from=builder /app/packages/db/dist ./node_modules/@linear-teams/db/dist
 COPY --from=builder /app/packages/db/package.json ./node_modules/@linear-teams/db/
 COPY --from=builder /app/packages/queue/dist ./node_modules/@linear-teams/queue/dist
 COPY --from=builder /app/packages/queue/package.json ./node_modules/@linear-teams/queue/
-
-# Copy external dependencies
-COPY --from=builder /app/node_modules/@linear ./node_modules/@linear
-COPY --from=builder /app/node_modules/@azure ./node_modules/@azure
-COPY --from=builder /app/node_modules/botbuilder ./node_modules/botbuilder
-COPY --from=builder /app/node_modules/botbuilder-core ./node_modules/botbuilder-core
-COPY --from=builder /app/node_modules/botframework-connector ./node_modules/botframework-connector
-COPY --from=builder /app/node_modules/botframework-schema ./node_modules/botframework-schema
-COPY --from=builder /app/node_modules/uuid ./node_modules/uuid
 
 EXPOSE 80
