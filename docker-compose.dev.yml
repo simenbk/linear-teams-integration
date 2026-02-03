@@ -1,0 +1,51 @@
+version: "3.8"
+
+# Development overrides for docker-compose.yml
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  bot:
+    build:
+      context: .
+      target: bot
+      # Enable BuildKit for faster builds
+      args:
+        BUILDKIT_INLINE_CACHE: "1"
+    volumes:
+      # Mount for hot-reloading in development (optional)
+      # - ./apps/bot/dist:/home/site/wwwroot/dist:ro
+    environment:
+      - NODE_ENV=development
+      - AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+
+  webhooks:
+    build:
+      context: .
+      target: webhooks
+      args:
+        BUILDKIT_INLINE_CACHE: "1"
+    environment:
+      - NODE_ENV=development
+      - AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+
+  processor:
+    build:
+      context: .
+      target: processor
+      args:
+        BUILDKIT_INLINE_CACHE: "1"
+    environment:
+      - NODE_ENV=development
+      - AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+
+  # Add adminer for database management
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    depends_on:
+      - postgres
+    networks:
+      - linear-teams-network
