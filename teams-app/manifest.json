@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.17",
+  "version": "1.0.0",
+  "id": "{{MICROSOFT_APP_ID}}",
+  "developer": {
+    "name": "Linear Teams Integration",
+    "websiteUrl": "https://github.com/simenbk/linear-teams-integration",
+    "privacyUrl": "https://github.com/simenbk/linear-teams-integration",
+    "termsOfUseUrl": "https://github.com/simenbk/linear-teams-integration"
+  },
+  "name": {
+    "short": "Linear Bot",
+    "full": "Linear Teams Integration"
+  },
+  "description": {
+    "short": "Sync Linear issues with Microsoft Teams",
+    "full": "A bot that integrates Linear issue tracking with Microsoft Teams, allowing you to receive notifications and interact with Linear issues directly from Teams."
+  },
+  "icons": {
+    "outline": "outline.png",
+    "color": "color.png"
+  },
+  "accentColor": "#5E6AD2",
+  "bots": [
+    {
+      "botId": "{{MICROSOFT_APP_ID}}",
+      "scopes": ["personal", "team", "groupChat"],
+      "supportsFiles": false,
+      "isNotificationOnly": false,
+      "commandLists": [
+        {
+          "scopes": ["personal", "team", "groupChat"],
+          "commands": [
+            {
+              "title": "help",
+              "description": "Show available commands"
+            },
+            {
+              "title": "link",
+              "description": "Link this channel to a Linear team"
+            },
+            {
+              "title": "unlink",
+              "description": "Unlink this channel from Linear"
+            },
+            {
+              "title": "status",
+              "description": "Show current Linear connection status"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": [
+    "linear-teams-dev-func-bot.azurewebsites.net"
+  ]
+}
