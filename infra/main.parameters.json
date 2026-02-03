@@ -7,6 +7,9 @@
     },
     "baseName": {
       "value": "linear-teams"
+    },
+    "postgresAdminLogin": {
+      "value": "pgadmin"
     }
   }
 }
