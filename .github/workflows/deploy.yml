@@ -69,6 +69,8 @@ jobs:
       bot_function_app_name: ${{ steps.deploy.outputs.botFunctionAppName }}
       webhooks_function_app_name: ${{ steps.deploy.outputs.webhooksFunctionAppName }}
       processor_function_app_name: ${{ steps.deploy.outputs.processorFunctionAppName }}
+      botFunctionAppUrl: ${{ steps.deploy.outputs.botFunctionAppUrl }}
+      webhooksFunctionAppUrl: ${{ steps.deploy.outputs.webhooksFunctionAppUrl }}
       bot_messages_endpoint: ${{ steps.deploy.outputs.botMessagesEndpoint }}
       linear_webhook_endpoint: ${{ steps.deploy.outputs.linearWebhookEndpoint }}
 
@@ -162,7 +164,7 @@ jobs:
     steps:
       - name: Test Bot Health Endpoint
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" "${{ needs.deploy-infrastructure.outputs.bot_messages_endpoint }}/health" || echo "000")
+          response=$(curl -s -o /dev/null -w "%{http_code}" "${{ needs.deploy-infrastructure.outputs.botFunctionAppUrl }}/api/health" || echo "000")
           if [ "$response" != "200" ]; then
             echo "Bot health check failed with status: $response"
             exit 1
@@ -171,7 +173,7 @@ jobs:
 
       - name: Test Webhooks Health Endpoint
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" "${{ needs.deploy-infrastructure.outputs.linear_webhook_endpoint }}/health" || echo "000")
+          response=$(curl -s -o /dev/null -w "%{http_code}" "${{ needs.deploy-infrastructure.outputs.webhooksFunctionAppUrl }}/api/health" || echo "000")
           if [ "$response" != "200" ]; then
             echo "Webhooks health check failed with status: $response"
             exit 1
