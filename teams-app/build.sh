@@ -16,6 +16,8 @@ fi
 
 cd "$(dirname "$0")"
 
+BUILD_DIR="build"
+
 # Check for icons
 if [ ! -f "color.png" ] || [ ! -f "outline.png" ]; then
   echo "Warning: Icon files missing. Creating placeholders..."
@@ -26,15 +28,15 @@ if [ ! -f "color.png" ] || [ ! -f "outline.png" ]; then
 fi
 
 # Generate manifest with real app ID
-sed "s/{{MICROSOFT_APP_ID}}/$APP_ID/g" manifest.json > manifest.build.json
+mkdir -p "$BUILD_DIR"
+sed "s/{{MICROSOFT_APP_ID}}/$APP_ID/g" manifest.json > "$BUILD_DIR/manifest.json"
 
-# Create zip package
-rm -f linear-teams-bot.zip
-zip linear-teams-bot.zip manifest.build.json color.png outline.png
-mv manifest.build.json manifest.build.json.bak
+# Create zip package with manifest.json (Teams requirement)
+rm -f "$BUILD_DIR/linear-teams-bot.zip"
+zip -j "$BUILD_DIR/linear-teams-bot.zip" "$BUILD_DIR/manifest.json" color.png outline.png
 
 echo ""
-echo "Created: linear-teams-bot.zip"
+echo "Created: $BUILD_DIR/linear-teams-bot.zip"
 echo ""
 echo "To install in Teams:"
 echo "1. Open Teams"
